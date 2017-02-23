@@ -3,19 +3,14 @@ const _ = require('underscore');
 const DrawCard = require('../../../drawcard.js');
 
 class ConsolidationOfPower extends DrawCard {
-    canPlay(player, card) {
-        if(player !== this.controller || this !== card) {
-            return false;
-        }
-
-        if(player.phase !== 'marshal') {
-            return false;
-        }
-
-        return super.canPlay(player, card);
+    setupCardAbilities() {
+        this.action({
+            method: 'selectCharacters',
+            phase: 'marshal'
+        });
     }
 
-    play(player) {
+    selectCharacters(player) {
         this.selectedStrength = 0;
 
         this.game.promptForSelect(player, {

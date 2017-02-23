@@ -305,7 +305,7 @@ class BaseCard {
     getMenu() {
         var menu = [];
 
-        if(this.menu.isEmpty()) {
+        if((this.location !== 'play area' && this.location !== 'active plot') || this.menu.isEmpty()) {
             return undefined;
         }
 

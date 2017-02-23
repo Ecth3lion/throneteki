@@ -402,6 +402,7 @@ class Player extends Spectator {
             this.game.addMessage('{0} plays {1} costing {2}', this, card, cost);
 
             card.play(this);
+            card.doAction(this);
 
             this.moveCard(card, 'discard pile');
 

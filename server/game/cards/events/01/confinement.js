@@ -1,19 +1,19 @@
 const DrawCard = require('../../../drawcard.js');
 
 class Confinement extends DrawCard {
-    play(player) {
+    setupCardAbilities() {
+        this.action({
+            method: 'selectCharacter'
+        });
+    }
+
+    selectCharacter(player) {
         this.game.promptForSelect(player, {
-            cardCondition: card => this.cardCondition(card),
+            cardCondition: card => card.location === 'play area' && card.getType() === 'character' && card.getStrength() <= 4,
             activePromptTitle: 'Select a character',
             waitingPromptTitle: 'Waiting for opponent to use ' + this.name,
             onSelect: (player, card) => this.onCardSelected(player, card)
         });
-
-        return true;
-    }
-
-    cardCondition(card) {
-        return card.location === 'play area' && card.getType() === 'character' && card.getStrength() <= 4;
     }
 
     onCardSelected(player, card) {
