@@ -8,6 +8,9 @@ describe('CardForcedReaction', function () {
         this.gameSpy = jasmine.createSpyObj('game', ['on', 'removeListener']);
         this.cardSpy = jasmine.createSpyObj('card', ['isBlank']);
         this.limitSpy = jasmine.createSpyObj('limit', ['increment', 'isAtMax', 'registerEvents', 'unregisterEvents']);
+        this.playerSpy = jasmine.createSpyObj('player', ['']);
+
+        this.cardSpy.controller = this.playerSpy;
 
         this.properties = {
             when: {

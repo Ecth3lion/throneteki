@@ -8,8 +8,8 @@ const AbilityResolver = require('../../../server/game/gamesteps/abilityresolver.
 describe('BaseAbility', function () {
     beforeEach(function () {
         this.gameSpy = jasmine.createSpyObj('game', ['queueStep']);
-
         this.cardSpy = jasmine.createSpyObj('card', ['']);
+        this.playerSpy = jasmine.createSpyObj('player', ['']);
         this.properties = {};
     });
 
@@ -55,7 +55,7 @@ describe('BaseAbility', function () {
 
     describe('queueResolver()', function() {
         beforeEach(function() {
-            this.context = { context: true };
+            this.context = { context: true, player: this.playerSpy };
             this.ability = new BaseAbility(this.gameSpy, this.cardSpy, this.properties);
             this.ability.queueResolver(this.context);
         });
@@ -71,7 +71,7 @@ describe('BaseAbility', function () {
             this.cost2 = jasmine.createSpyObj('cost1', ['canPay']);
             this.ability = new BaseAbility(this.gameSpy, this.cardSpy, this.properties);
             this.ability.cost = [this.cost1, this.cost2];
-            this.context = { context: 1 };
+            this.context = { context: 1, player: this.playerSpy };
         });
 
         describe('when all costs can be paid', function() {

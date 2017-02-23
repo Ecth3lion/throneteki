@@ -55,6 +55,10 @@ class BaseAbility {
      * @returns {Boolean}
      */
     canPayCosts(context) {
+        if(context.player.cannotTriggerCardAbilities) {
+            return false;
+        }
+
         return _.all(this.cost, cost => cost.canPay(context));
     }
 

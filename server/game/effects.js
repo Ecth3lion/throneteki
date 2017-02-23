@@ -428,6 +428,16 @@ const Effects = {
             }
         };
     },
+    cannotTriggerCardEffects: function() {
+        return {
+            apply: function(player) {
+                player.cannotTriggerCardEffects = true;
+            },
+            unapply: function(player) {
+                player.cannotTriggerCardEffects = false;
+            }
+        };
+    },
     /**
      * Effects specifically for Old Wyk.
      */
