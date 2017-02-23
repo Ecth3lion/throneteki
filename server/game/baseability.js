@@ -1,6 +1,7 @@
 const _ = require('underscore');
 
 const AbilityResolver = require('./gamesteps/abilityresolver.js');
+const Costs = require('./costs.js');
 
 /**
  * Base class representing an ability that can be done by the player. This
@@ -27,6 +28,10 @@ class BaseAbility {
         this.game = game;
         this.source = source;
         this.cost = this.buildCost(properties.cost);
+
+        if(source.getType() === 'event') {
+            this.cost.push(Costs.playEvent());
+        }
     }
 
     buildCost(cost) {

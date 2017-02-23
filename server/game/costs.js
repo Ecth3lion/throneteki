@@ -76,6 +76,18 @@ const Costs = {
             }
         };
     },
+    playEvent: function() {
+        return {
+            canPay: function(context) {
+                return context.source.location === 'hand' && context.source.getType() === 'event' && context.source.controller === context.player && context.player.gold >= context.source.getCost();
+            },
+            pay: function(context) {
+                context.player.gold -= context.source.getCost();
+                context.player.moveCard(context.source, 'discard pile');
+                context.game.addMessage('{0} plays {1}, costing {2}', context.player, context.source, context.source.getCost());
+            }
+        };
+    },
     /**
      * Cost that will stand the card that initiated the ability (e.g.,
      * Barristan Selmy (TS)).
