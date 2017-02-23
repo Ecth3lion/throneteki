@@ -143,6 +143,12 @@ class BaseCard {
     reaction(properties) {
         var reaction = new CardReaction(this.game, this, properties);
         this.abilities.reactions.push(reaction);
+
+        if(this.getType() === 'event') {
+            _.each(this.abilities.reactions, reaction => {
+                reaction.registerEvents();
+            });
+        }        
     }
 
     forcedReaction(properties) {
