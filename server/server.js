@@ -1,7 +1,6 @@
 const app = require('express')();
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const raven = require('raven');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const config = require('./config.js');

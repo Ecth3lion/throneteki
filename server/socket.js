@@ -2,6 +2,9 @@ const logger = require('./log.js');
 const EventEmitter = require('events');
 const jwt = require('jsonwebtoken');
 
+ravenClient = new raven.Client(config.sentryDsn);
+ravenClient.patchGlobal();
+
 class Socket extends EventEmitter {
     constructor(socket, options = {}) {
         super();
@@ -41,8 +44,13 @@ class Socket extends EventEmitter {
         if(!this.user) {
             return;
         }
-
-        callback(this, ...args);
+        
+        try {
+            callback(this, ...args);
+        } catch(err) {
+            logger.info(err);
+            ravenClient.captureException(err, { extra: args });
+        }
     }
 
     onAuthenticate(token) {

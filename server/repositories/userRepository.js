@@ -1,17 +1,59 @@
-const db = require('monk')('mongodb://127.0.0.1:27017/throneteki');
+const mongoskin = require('mongoskin');
 const users = db.get('users');
 const escapeRegex = require('../util.js').escapeRegex;
 
 class UserRepository {
-    getUserByUsername(username) {
-        return users.findOne({ username: {'$regex': new RegExp('^' + escapeRegex(username.toLowerCase()) + '$', 'i') }});
+    constructor(dbPath) {
+        this.db = mongoskin.db(dbPath);
     }
 
-    getUserById(id) {
-        return users.findOne({ _id: id });
+    callCallbackIfPresent(callback, ...params) {
+        if(!callback) {
+            return;
+        }
+
+        callback(...params);
     }
 
-    addUser(user) {
+    getUserByUsername(username, callback) {
+        db.collection('users').find({ username: {'$regex': new RegExp('^' + escapeRegex(username.toLowerCase()) + '$', 'i') }}).toArray((err, users) => {
+            if(err) {
+                logger.error(err);
+
+                this.callCallbackIfPresent(callback, err);
+
+                return;
+            } 
+            
+            this.callCallbackIfPresent(callback, err, users[0]);
+        });
+    }
+
+    getUserById(id, callback) {
+        db.collection('users').find({ _id: mongoskin.helper.toObjectID(id) }).toArray((err, users => {
+            if(err) {
+                logger.error(err);
+
+                this.callCallbackIfPresent(callback, err);
+
+                return;
+            }
+
+            this.callCallbackIfPresent(err, users);
+        }));
+    }
+
+    addUser(user, callback) {
+        db.collection('users').insert(user, (err, result) => {
+            if(err) {
+                logger.info(err);
+                this.callCallbackIfPresent(callback, err);
+
+                return;
+            }
+
+            this.callCallbackIfPresent(callback, result);
+        })
         return users.insert(user);
     }
 
